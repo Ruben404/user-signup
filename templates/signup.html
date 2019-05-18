@@ -4,7 +4,7 @@
 
 <h1>Signup</h1>
 
-<form method="POST">
+<form action="/signed-in" method="POST">
     <table>
         <tr>
             <td>
@@ -12,15 +12,16 @@
             </td>
             <td>
                 <input type="username" name="username">
+                <span class="error">{{username_error}}</span>
             </td>
         </tr>
-        <p class="error">{{username_error}}</p>
         <tr>
             <td>
                 <label for="password">Password</label>
             </td>
             <td>
                 <input type="password" name="password">
+                <span class="error">{{password_error}}</span>
             </td>
         </tr>
         <tr>
@@ -29,6 +30,7 @@
             </td>
             <td>
                 <input type="password" name="verify">
+                <span class="error">{{verify_error}}</span>
             </td>
         </tr>
         <tr>
@@ -37,6 +39,7 @@
             </td>
             <td>
                 <input type="email" name="email">
+                <span class="error">{{email_error}}</span>
             </td>
         </tr>
     </table>

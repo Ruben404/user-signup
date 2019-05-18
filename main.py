@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -9,56 +9,75 @@ app.config['DEBUG'] = True
 
 
 
-@app.route('/sign-up')
+@app.route("/signup", methods=['POST', 'GET'])
 def signup():
 
+    return render_template('signup.html')
 
-    return render_template('sign-up.html')
 
-
-@app.route('/sign-up', methods=['POST'])
-def requirements():
+@app.route("/signed-in", methods=['POST', 'GET'])
+def signed_in():
 
     username = request.form['username']
     password = request.form['password']
-    # verify = request.form['verify']
-    # email = request.form['email']
+    verify = request.form['verify']
+    email = request.form['email']
 
     username_error = ''
     password_error = ''
-    # verify_error = ''
-    # email_error = ''
+    verify_error = ''
+    email_error = ''
 
-    if len(username) > 3 or len(username) < 20:
-        username=username
-        username_error=''
-    else:
-        username_error = 'Username must be 3-20 characters.'
+    if len(username) > 3 and len(username) < 20:
+        pass        
+    elif len(username) == 0:
+        username_error = 'Field required*'
         username = ''
-    if not username_error:
-        return redirect('/signed-in')
+        
     else:
-        return render_template('sign-up.html',
+        username_error = 'Not a valid length. (3-20)'
+        username = ''
+
+    if password == verify:
+        pass
+    else:
+        verify_error = ' Passwords do not match.'
+        password = ''
+        verify = ''
+
+    if email == '':
+        pass
+    elif len(email) > 3 and len(email) < 20:
+        pass
+    else:
+        if len(email) > 0 and len(email) < 3:
+            email_error = 'email length is too short.'
+            email = ''
+        elif len(email) >20:
+            email_error = 'email is too long.'
+        else:
+            pass
+
+
+
+    if not username_error and  not password_error and not verify_error and not email_error:
+
+        return render_template('signed-in.html', name=username)
+    else:
+        return render_template('signup.html',
+        username=username,
+        password=password,
+        verify=verify,
+        email=email,
         username_error=username_error,
-        username=username)
+        password_error=password_error,
+        verify_error=verify_error,
+        email_error=email_error)
 
 
-
-@app.route('/signed-in')
-def signed_in():
-    username = request.args.get('username')
-    # password = request.form['password']
-    # verify = request.form['verify']
-    # email = request.form['email']
-
-
-    return '<h1>Welcome, {0}.</h1>'.format(username)
-    # return render_template('signed-in.html', name=username)
-
-
-@app.route('/')
+@app.route("/")
 def index():
-    return redirect('/sign-up')
+    return redirect('/signup')
 
 
 app.run()
