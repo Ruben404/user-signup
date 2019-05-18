@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -23,7 +23,22 @@ def signed_in():
     verify = request.form['verify']
     email = request.form['email']
 
-    
+    username_error = ''
+    password_error = ''
+    verify_error = ''
+    email_error = ''
+
+    if len(username) == 0:
+        username_error = 'field required*'
+        username = ''
+    else:
+        pass
+
+    if len(username) > 3 or len(username) < 20:
+        pass
+    else:
+        username_error = 'Username must be 3-20 characters.'
+        username = ''
 
     return render_template('signed-in.html', name=username)
 
