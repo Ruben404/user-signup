@@ -9,43 +9,56 @@ app.config['DEBUG'] = True
 
 
 
-@app.route("/signup", methods=['POST', 'GET'])
+@app.route('/sign-up')
 def signup():
 
-    return render_template('signup.html')
+
+    return render_template('sign-up.html')
 
 
-@app.route("/signed-in", methods=['POST', 'GET'])
-def signed_in():
+@app.route('/sign-up', methods=['POST'])
+def requirements():
 
     username = request.form['username']
     password = request.form['password']
-    verify = request.form['verify']
-    email = request.form['email']
+    # verify = request.form['verify']
+    # email = request.form['email']
 
     username_error = ''
     password_error = ''
-    verify_error = ''
-    email_error = ''
-
-    if len(username) == 0:
-        username_error = 'field required*'
-        username = ''
-    else:
-        pass
+    # verify_error = ''
+    # email_error = ''
 
     if len(username) > 3 or len(username) < 20:
-        pass
+        username=username
+        username_error=''
     else:
         username_error = 'Username must be 3-20 characters.'
         username = ''
+    if not username_error:
+        return redirect('/signed-in')
+    else:
+        return render_template('sign-up.html',
+        username_error=username_error,
+        username=username)
 
-    return render_template('signed-in.html', name=username)
 
 
-@app.route("/")
+@app.route('/signed-in')
+def signed_in():
+    username = request.args.get('username')
+    # password = request.form['password']
+    # verify = request.form['verify']
+    # email = request.form['email']
+
+
+    return '<h1>Welcome, {0}.</h1>'.format(username)
+    # return render_template('signed-in.html', name=username)
+
+
+@app.route('/')
 def index():
-    return redirect('/signup')
+    return redirect('/sign-up')
 
 
 app.run()
